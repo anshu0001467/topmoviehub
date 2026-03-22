@@ -52,7 +52,7 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Plus Jakarta Sans', sans-serif;
-    background-color: #0f0e0e;
+    background-color: #070709;
     color: #f0ece4;
   }
 }

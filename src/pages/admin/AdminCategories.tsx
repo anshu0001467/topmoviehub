@@ -57,21 +57,23 @@ export default function AdminCategories() {
     setEditCat({ name: cat.name, slug: cat.slug, icon: cat.icon, backdropUrl: cat.backdropUrl || "" });
   };
 
-  const inputCls = "px-3 py-2 bg-[#0f0e0e] border border-[#2e2b27] rounded-lg text-[#f0ece4] text-sm placeholder:text-[#8a8070] focus:outline-none focus:border-[#e8a020] transition-all";
+  const inputCls = "px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-sm placeholder:text-white/20 focus:outline-none focus:border-[#e8a020]/60 focus:ring-2 focus:ring-[#e8a020]/15 transition-all";
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl font-bold text-[#f0ece4]"
-              style={{ fontFamily: "Fraunces, serif" }}>
+          <h1
+            className="font-black text-3xl text-white"
+            style={{ fontFamily: "Fraunces, serif" }}
+          >
             Categories
           </h1>
-          <p className="text-[#8a8070] text-sm">{categories.length} genres configured</p>
+          <p className="text-white/30 text-sm font-mono">{categories.length} genres configured</p>
         </div>
         <button
           onClick={() => setAdding(true)}
-          className="flex items-center gap-2 px-5 py-2.5 bg-[#e8a020] text-[#0f0e0e] font-bold text-sm rounded-sm hover:bg-[#f0b030] transition-colors"
+          className="flex items-center gap-2 px-5 py-2.5 bg-[#e8a020] text-black font-bold text-sm rounded-xl hover:bg-[#f5b830] transition-all shadow-[0_0_20px_rgba(232,160,32,0.25)]"
         >
           <Plus className="w-4 h-4" />
           Add Category
@@ -80,9 +82,11 @@ export default function AdminCategories() {
 
       {/* Add Form */}
       {adding && (
-        <div className="bg-[#1a1917] border-t-2 border-[#e8a020] border-x border-b border-x-[#2e2b27] border-b-[#2e2b27] rounded-xl p-6">
-          <h2 className="font-display text-lg font-bold text-[#f0ece4] mb-4"
-              style={{ fontFamily: "Fraunces, serif" }}>
+        <div className="bg-white/[0.03] border border-[#e8a020]/25 rounded-2xl p-6">
+          <h2
+            className="font-black text-lg text-white mb-4"
+            style={{ fontFamily: "Fraunces, serif" }}
+          >
             New Category
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
@@ -105,18 +109,18 @@ export default function AdminCategories() {
               placeholder="Backdrop image URL (optional)"
             />
           </div>
-          <div className="mb-4">
-            <p className="text-[#8a8070] text-xs uppercase tracking-widest font-mono-grotesk mb-2">Icon</p>
+          <div className="mb-5">
+            <p className="text-white/25 text-[10px] uppercase tracking-[0.2em] font-mono font-bold mb-2.5">Icon</p>
             <div className="flex flex-wrap gap-2">
               {ICONS.map((icon) => (
                 <button
                   key={icon}
                   type="button"
                   onClick={() => setNewCat((p) => ({ ...p, icon }))}
-                  className={`w-10 h-10 text-xl rounded-lg transition-all ${
+                  className={`w-10 h-10 text-xl rounded-xl transition-all ${
                     newCat.icon === icon
-                      ? "bg-[#e8a020]/20 border-2 border-[#e8a020] scale-110"
-                      : "bg-[#0f0e0e] border border-[#2e2b27] hover:border-[#e8a020]/40"
+                      ? "bg-[#e8a020]/20 ring-2 ring-[#e8a020] scale-110"
+                      : "bg-white/5 border border-white/10 hover:border-[#e8a020]/40"
                   }`}
                 >
                   {icon}
@@ -125,10 +129,16 @@ export default function AdminCategories() {
             </div>
           </div>
           <div className="flex gap-2">
-            <button onClick={() => setAdding(false)} className="px-4 py-2 border border-[#2e2b27] text-[#8a8070] text-sm rounded-sm hover:border-[#8a8070] transition-colors">
+            <button
+              onClick={() => setAdding(false)}
+              className="px-4 py-2.5 border border-white/10 text-white/50 text-sm rounded-xl hover:border-white/20 hover:text-white transition-all"
+            >
               Cancel
             </button>
-            <button onClick={handleAdd} className="px-6 py-2 bg-[#e8a020] text-[#0f0e0e] font-bold text-sm rounded-sm hover:bg-[#f0b030] transition-colors">
+            <button
+              onClick={handleAdd}
+              className="px-6 py-2.5 bg-[#e8a020] text-black font-bold text-sm rounded-xl hover:bg-[#f5b830] transition-all"
+            >
               Add Category
             </button>
           </div>
@@ -136,8 +146,8 @@ export default function AdminCategories() {
       )}
 
       {/* List */}
-      <div className="bg-[#1a1917] border border-[#2e2b27] rounded-xl overflow-hidden">
-        <div className="divide-y divide-[#2e2b27]">
+      <div className="bg-white/[0.03] border border-white/8 rounded-2xl overflow-hidden">
+        <div className="divide-y divide-white/5">
           {categories.map((cat) => (
             <div key={cat.id} className="px-5 py-4">
               {editingId === cat.id ? (
@@ -161,26 +171,38 @@ export default function AdminCategories() {
                     placeholder="Backdrop URL"
                   />
                   <div className="flex gap-2">
-                    <button onClick={() => handleEdit(cat.id)} className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-[#e8a020] text-[#0f0e0e] font-bold text-sm rounded-sm">
+                    <button
+                      onClick={() => handleEdit(cat.id)}
+                      className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-[#e8a020] text-black font-bold text-sm rounded-xl"
+                    >
                       <Check className="w-3.5 h-3.5" /> Save
                     </button>
-                    <button onClick={() => setEditingId(null)} className="p-2 border border-[#2e2b27] text-[#8a8070] rounded-sm hover:border-[#8a8070]">
+                    <button
+                      onClick={() => setEditingId(null)}
+                      className="p-2 border border-white/10 text-white/40 rounded-xl hover:border-white/20"
+                    >
                       <X className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
               ) : (
                 <div className="flex items-center gap-4">
-                  <span className="text-2xl">{cat.icon}</span>
+                  <span className="text-2xl w-8 text-center">{cat.icon}</span>
                   <div className="flex-1">
-                    <p className="text-[#f0ece4] font-medium">{cat.name}</p>
-                    <p className="text-[#8a8070] text-xs font-mono-grotesk">/{cat.slug}</p>
+                    <p className="text-white font-medium">{cat.name}</p>
+                    <p className="text-white/25 text-xs font-mono">/{cat.slug}</p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <button onClick={() => startEdit(cat)} className="p-1.5 text-[#8a8070] hover:text-[#e8a020] hover:bg-[#e8a020]/10 rounded transition-colors">
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={() => startEdit(cat)}
+                      className="p-2 text-white/30 hover:text-[#e8a020] hover:bg-[#e8a020]/10 rounded-lg transition-all"
+                    >
                       <Edit2 className="w-3.5 h-3.5" />
                     </button>
-                    <button onClick={() => setDeleteConfirm(cat.id)} className="p-1.5 text-[#8a8070] hover:text-[#c0392b] hover:bg-[#c0392b]/10 rounded transition-colors">
+                    <button
+                      onClick={() => setDeleteConfirm(cat.id)}
+                      className="p-2 text-white/30 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
+                    >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
@@ -188,21 +210,40 @@ export default function AdminCategories() {
               )}
             </div>
           ))}
+          {categories.length === 0 && (
+            <p className="text-white/20 text-sm text-center py-12 font-mono">
+              No categories yet.
+            </p>
+          )}
         </div>
       </div>
 
       {/* Delete modal */}
       {deleteConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-          <div className="bg-[#1e1c19] border border-[#2e2b27] rounded-xl p-8 max-w-sm w-full">
-            <h3 className="font-display text-xl font-bold text-[#f0ece4] text-center mb-2"
-                style={{ fontFamily: "Fraunces, serif" }}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="bg-[#0d0d10] border border-white/10 rounded-2xl p-8 max-w-sm w-full shadow-2xl">
+            <h3
+              className="font-black text-xl text-white text-center mb-2"
+              style={{ fontFamily: "Fraunces, serif" }}
+            >
               Delete Category?
             </h3>
-            <p className="text-[#8a8070] text-sm text-center mb-6">This action cannot be undone.</p>
+            <p className="text-white/35 text-sm text-center mb-7 font-mono">
+              This action cannot be undone.
+            </p>
             <div className="flex gap-3">
-              <button onClick={() => setDeleteConfirm(null)} className="flex-1 py-2.5 border border-[#2e2b27] text-[#f0ece4] text-sm rounded-sm">Cancel</button>
-              <button onClick={() => handleDelete(deleteConfirm)} className="flex-1 py-2.5 bg-[#c0392b] text-white text-sm font-bold rounded-sm">Delete</button>
+              <button
+                onClick={() => setDeleteConfirm(null)}
+                className="flex-1 py-2.5 border border-white/10 text-white/60 text-sm rounded-xl hover:border-white/20 transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleDelete(deleteConfirm)}
+                className="flex-1 py-2.5 bg-red-500 text-white text-sm font-bold rounded-xl hover:bg-red-600 transition-all"
+              >
+                Delete
+              </button>
             </div>
           </div>
         </div>

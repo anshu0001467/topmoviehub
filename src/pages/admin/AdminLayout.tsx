@@ -1,7 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, Outlet } from "react-router-dom";
 import {
-  Film, LayoutDashboard, List, PlusCircle, FolderOpen, Settings, LogOut, Menu, X,
+  Film,
+  LayoutDashboard,
+  List,
+  PlusCircle,
+  FolderOpen,
+  Settings,
+  LogOut,
+  Menu,
+  X,
+  Globe,
+  Zap,
 } from "lucide-react";
 import { getAdminSession, setAdminSession } from "@/lib/store";
 
@@ -27,102 +37,137 @@ export default function AdminLayout() {
     navigate("/admin/login");
   };
 
+  const currentLabel =
+    NAV_ITEMS.find((n) => location.pathname.startsWith(n.href))?.label ?? "Admin";
+
   return (
-    <div className="min-h-screen bg-[#0f0e0e] flex">
-      {/* Sidebar */}
+    <div className="min-h-screen bg-[#070709] flex">
+      {/* ── SIDEBAR ── */}
       <aside
-        className={`fixed top-0 left-0 bottom-0 z-40 w-64 bg-[#1e1c19] border-r border-[#2e2b27] flex flex-col transition-transform duration-300 ${
+        className={`fixed top-0 left-0 bottom-0 z-40 w-64 bg-[#0d0d10] border-r border-white/8 flex flex-col transition-transform duration-300 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
       >
+        {/* Ambient glow top */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-32 bg-[#e8a020]/6 blur-[50px] rounded-full pointer-events-none" />
+
         {/* Logo */}
-        <div className="px-6 py-6 border-b border-[#2e2b27]">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-sm bg-[#e8a020] flex items-center justify-center">
-              <Film className="w-4 h-4 text-[#0f0e0e]" />
+        <div className="relative px-5 py-5 border-b border-white/8">
+          <Link to="/" className="flex items-center gap-3 group">
+            <div className="w-9 h-9 rounded-xl bg-[#e8a020] flex items-center justify-center shadow-[0_0_20px_rgba(232,160,32,0.4)] group-hover:shadow-[0_0_30px_rgba(232,160,32,0.6)] transition-shadow">
+              <Film className="w-4 h-4 text-black" />
             </div>
             <div>
-              <p className="font-display font-bold text-[#f0ece4] text-sm leading-tight"
-                 style={{ fontFamily: "Fraunces, serif" }}>
+              <p
+                className="font-black text-white text-sm leading-tight"
+                style={{ fontFamily: "Fraunces, serif" }}
+              >
                 TopMoviesHub
               </p>
-              <p className="text-[#8a8070] text-xs font-mono-grotesk">Admin Panel</p>
+              <div className="flex items-center gap-1 mt-0.5">
+                <Zap className="w-2.5 h-2.5 text-[#e8a020]" />
+                <p className="text-white/30 text-[10px] font-mono uppercase tracking-widest">
+                  Admin Panel
+                </p>
+              </div>
             </div>
           </Link>
         </div>
 
-        {/* Nav Items */}
-        <nav className="flex-1 px-3 py-6 space-y-1 overflow-y-auto">
+        {/* Nav */}
+        <nav className="flex-1 px-3 py-5 space-y-1 overflow-y-auto">
+          <p className="text-white/20 text-[10px] uppercase tracking-[0.2em] font-mono font-bold px-3 mb-3">
+            Navigation
+          </p>
           {NAV_ITEMS.map((item) => {
-            const active = location.pathname === item.href;
+            const active =
+              item.href === "/admin/dashboard"
+                ? location.pathname === item.href
+                : location.pathname.startsWith(item.href);
             return (
               <Link
                 key={item.href}
                 to={item.href}
                 onClick={() => setSidebarOpen(false)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                   active
-                    ? "bg-[#e8a020]/15 text-[#e8a020] border-l-2 border-[#e8a020]"
-                    : "text-[#8a8070] hover:text-[#f0ece4] hover:bg-[#2e2b27]/50"
+                    ? "bg-[#e8a020]/12 text-[#e8a020] shadow-[inset_0_0_0_1px_rgba(232,160,32,0.25)]"
+                    : "text-white/40 hover:text-white/80 hover:bg-white/5"
                 }`}
               >
-                <item.icon className="w-4 h-4 flex-shrink-0" />
+                <item.icon
+                  className={`w-4 h-4 flex-shrink-0 ${active ? "text-[#e8a020]" : ""}`}
+                />
                 {item.label}
+                {active && (
+                  <div className="ml-auto w-1.5 h-1.5 rounded-full bg-[#e8a020]" />
+                )}
               </Link>
             );
           })}
         </nav>
 
-        {/* Logout */}
-        <div className="px-3 py-4 border-t border-[#2e2b27]">
+        {/* Bottom */}
+        <div className="px-3 py-4 border-t border-white/8 space-y-1">
+          <Link
+            to="/"
+            className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-white/30 hover:text-white/70 hover:bg-white/5 transition-all"
+          >
+            <Globe className="w-4 h-4" />
+            View Site
+          </Link>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-[#8a8070] hover:text-[#c0392b] hover:bg-[#c0392b]/10 transition-all"
+            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-white/30 hover:text-red-400 hover:bg-red-500/8 transition-all"
           >
             <LogOut className="w-4 h-4" />
-            Logout
+            Sign Out
           </button>
         </div>
       </aside>
 
-      {/* Overlay for mobile */}
+      {/* Overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-30 bg-black/60 lg:hidden"
+          className="fixed inset-0 z-30 bg-black/70 backdrop-blur-sm lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
-      {/* Main Content */}
+      {/* ── MAIN ── */}
       <div className="flex-1 lg:ml-64 flex flex-col min-h-screen">
-        {/* Top Bar */}
-        <header className="sticky top-0 z-20 bg-[#1e1c19]/90 backdrop-blur-sm border-b border-[#2e2b27] px-4 sm:px-6 h-16 flex items-center justify-between">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="lg:hidden p-2 text-[#8a8070] hover:text-[#f0ece4]"
-          >
-            <Menu className="w-5 h-5" />
-          </button>
-          <div className="hidden lg:flex items-center gap-2 text-[#8a8070] text-sm">
-            <span className="font-mono-grotesk">Admin Panel</span>
-          </div>
+        {/* Top bar */}
+        <header className="sticky top-0 z-20 bg-[#070709]/90 backdrop-blur-md border-b border-white/8 px-4 sm:px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="lg:hidden p-2 text-white/40 hover:text-white/80 rounded-lg hover:bg-white/8 transition-all"
+            >
+              <Menu className="w-4 h-4" />
+            </button>
+            <div className="hidden sm:flex items-center gap-2">
+              <span className="text-white/20 text-xs font-mono">/</span>
+              <span className="text-white/60 text-sm font-medium">{currentLabel}</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-400 rounded-full" />
-              <span className="text-[#8a8070] text-xs font-mono-grotesk">Logged in</span>
+              <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
+              <span className="text-white/30 text-xs font-mono hidden sm:block">Active session</span>
             </div>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-1.5 text-[#8a8070] text-xs hover:text-[#c0392b] transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-white/35 text-xs hover:text-red-400 hover:bg-red-500/8 rounded-lg transition-all"
             >
               <LogOut className="w-3.5 h-3.5" />
-              Logout
+              <span className="hidden sm:block">Logout</span>
             </button>
           </div>
         </header>
 
-        {/* Page Content */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8">
+        {/* Page content */}
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full">
           <Outlet />
         </main>
       </div>

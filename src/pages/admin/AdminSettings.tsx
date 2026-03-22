@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Save, Check } from "lucide-react";
+import { Save, Check, Settings, Film, Star, Zap } from "lucide-react";
 import { getSettings, saveSettings, getMovies } from "@/lib/store";
 import { SiteSettings } from "@/types/movie";
 
@@ -24,25 +24,38 @@ export default function AdminSettings() {
     setTimeout(() => setSaved(false), 2000);
   };
 
-  const inputCls = "w-full px-4 py-3 bg-[#0f0e0e] border border-[#2e2b27] rounded-lg text-[#f0ece4] text-sm placeholder:text-[#8a8070] focus:outline-none focus:border-[#e8a020] focus:ring-1 focus:ring-[#e8a020]/20 transition-all";
-  const labelCls = "block text-[#8a8070] text-xs uppercase tracking-widest font-mono-grotesk mb-2";
+  const inputCls =
+    "w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white text-sm placeholder:text-white/20 focus:outline-none focus:border-[#e8a020]/60 focus:ring-2 focus:ring-[#e8a020]/15 transition-all";
+  const labelCls =
+    "block text-white/30 text-[10px] uppercase tracking-[0.2em] font-mono font-bold mb-2.5";
 
   return (
     <div className="max-w-2xl space-y-6">
+      {/* Header */}
       <div>
-        <h1 className="font-display text-3xl font-bold text-[#f0ece4]"
-            style={{ fontFamily: "Fraunces, serif" }}>
+        <div className="flex items-center gap-2 mb-2">
+          <Settings className="w-4 h-4 text-[#e8a020]" />
+          <span className="text-[#e8a020] text-xs font-bold tracking-[0.2em] uppercase font-mono">
+            Configuration
+          </span>
+        </div>
+        <h1
+          className="font-black text-3xl text-white"
+          style={{ fontFamily: "Fraunces, serif" }}
+        >
           Settings
         </h1>
-        <p className="text-[#8a8070] text-sm">Configure your site-wide settings and featured content.</p>
+        <p className="text-white/30 text-sm font-mono mt-1">
+          Configure site-wide settings and featured content.
+        </p>
       </div>
 
-      {/* Site Settings */}
-      <div className="bg-[#1a1917] border-t-2 border-[#e8a020] border-x border-b border-x-[#2e2b27] border-b-[#2e2b27] rounded-xl p-6 space-y-5">
-        <h2 className="font-display text-lg font-bold text-[#f0ece4]"
-            style={{ fontFamily: "Fraunces, serif" }}>
-          Site Identity
-        </h2>
+      {/* Site Identity */}
+      <div className="bg-white/[0.03] border border-white/8 rounded-2xl p-6 space-y-5">
+        <div className="flex items-center gap-2 mb-1">
+          <Zap className="w-4 h-4 text-[#e8a020]" />
+          <h2 className="text-white font-semibold">Site Identity</h2>
+        </div>
         <div>
           <label className={labelCls}>Site Title</label>
           <input
@@ -66,45 +79,55 @@ export default function AdminSettings() {
       </div>
 
       {/* Featured Content */}
-      <div className="bg-[#1a1917] border-t-2 border-[#e8a020] border-x border-b border-x-[#2e2b27] border-b-[#2e2b27] rounded-xl p-6 space-y-5">
-        <h2 className="font-display text-lg font-bold text-[#f0ece4]"
-            style={{ fontFamily: "Fraunces, serif" }}>
-          Featured Content
-        </h2>
+      <div className="bg-white/[0.03] border border-white/8 rounded-2xl p-6 space-y-5">
+        <div className="flex items-center gap-2 mb-1">
+          <Film className="w-4 h-4 text-[#e8a020]" />
+          <h2 className="text-white font-semibold">Featured Content</h2>
+        </div>
         <div>
           <label className={labelCls}>Hero Movie (Homepage Spotlight)</label>
           <select
             value={settings.heroMovieId}
             onChange={(e) => setSettings((p) => ({ ...p, heroMovieId: e.target.value }))}
-            className={`${inputCls}`}
+            className={`${inputCls} bg-[#0d0d10]`}
           >
             <option value="">Select a movie...</option>
             {movies.map((m) => (
-              <option key={m.id} value={m.id}>{m.title}</option>
+              <option key={m.id} value={m.id}>
+                {m.title}
+              </option>
             ))}
           </select>
+          <p className="text-white/20 text-xs font-mono mt-2">
+            This movie will appear in the full-screen hero section on the homepage.
+          </p>
         </div>
         <div>
           <label className={labelCls}>Featured Movie (Spotlight Section)</label>
           <select
             value={settings.featuredMovieId}
             onChange={(e) => setSettings((p) => ({ ...p, featuredMovieId: e.target.value }))}
-            className={`${inputCls}`}
+            className={`${inputCls} bg-[#0d0d10]`}
           >
             <option value="">Select a movie...</option>
             {movies.map((m) => (
-              <option key={m.id} value={m.id}>{m.title}</option>
+              <option key={m.id} value={m.id}>
+                {m.title}
+              </option>
             ))}
           </select>
+          <p className="text-white/20 text-xs font-mono mt-2">
+            This movie is highlighted in the editor's picks section.
+          </p>
         </div>
       </div>
 
       <button
         onClick={handleSave}
-        className={`flex items-center gap-2 px-8 py-3.5 font-bold text-sm rounded-sm transition-all ${
+        className={`flex items-center gap-2.5 px-8 py-3.5 font-bold text-sm rounded-xl transition-all ${
           saved
-            ? "bg-green-500 text-white"
-            : "bg-[#e8a020] text-[#0f0e0e] hover:bg-[#f0b030] amber-glow"
+            ? "bg-emerald-500 text-white shadow-[0_0_20px_rgba(52,211,153,0.3)]"
+            : "bg-[#e8a020] text-black hover:bg-[#f5b830] shadow-[0_0_25px_rgba(232,160,32,0.3)] hover:shadow-[0_0_35px_rgba(232,160,32,0.5)]"
         }`}
       >
         {saved ? <Check className="w-4 h-4" /> : <Save className="w-4 h-4" />}
