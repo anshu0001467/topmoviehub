@@ -12,6 +12,10 @@ import {
   ChevronDown,
   Globe,
   Sparkles,
+  Trophy,
+  Zap,
+  Film,
+  ArrowRight,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -46,6 +50,8 @@ export default function HomePage() {
   const recentMovies = [...movies]
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 9);
+  const topRatedMovies = [...movies].sort((a, b) => b.rating - a.rating).slice(0, 6);
+  const actionMovies = movies.filter((m) => m.genres.includes("Action")).slice(0, 8);
 
   const genreRows = categories
     .slice(0, 5)
@@ -321,20 +327,26 @@ export default function HomePage() {
       {/* ═══════════════════════════════════════
           STATS BAR
       ═══════════════════════════════════════ */}
-      <div className="border-y border-white/5 bg-[#0c0c0f]">
+      <div className="border-y border-white/5 bg-[#0c0c0f] overflow-hidden relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#e8a020]/3 via-transparent to-purple-900/3 pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-10 py-5">
           <div className="flex flex-wrap items-center justify-center sm:justify-between gap-6">
             {[
-              { label: "Total Films", value: `${movies.length}+` },
-              { label: "Languages", value: `${[...new Set(movies.map((m) => m.language))].length}+` },
-              { label: "Genres", value: `${categories.length}` },
-              { label: "Quality", value: "4K · 1080p · 720p" },
+              { label: "Total Films", value: `${movies.length}+`, icon: <Film className="w-3.5 h-3.5" /> },
+              { label: "Languages", value: `${[...new Set(movies.map((m) => m.language))].length}+`, icon: <Globe className="w-3.5 h-3.5" /> },
+              { label: "Genres", value: `${categories.length}`, icon: <Zap className="w-3.5 h-3.5" /> },
+              { label: "Quality", value: "4K · 1080p · 720p", icon: <Sparkles className="w-3.5 h-3.5" /> },
             ].map((s) => (
               <div key={s.label} className="flex items-center gap-3">
                 <div className="w-px h-8 bg-[#e8a020]/30 hidden sm:block" />
-                <div>
-                  <p className="text-[#e8a020] font-black text-lg font-mono">{s.value}</p>
-                  <p className="text-white/30 text-xs uppercase tracking-widest">{s.label}</p>
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-[#e8a020]/8 border border-[#e8a020]/15 flex items-center justify-center text-[#e8a020]">
+                    {s.icon}
+                  </div>
+                  <div>
+                    <p className="text-[#e8a020] font-black text-lg font-mono leading-none">{s.value}</p>
+                    <p className="text-white/25 text-[10px] uppercase tracking-widest font-mono">{s.label}</p>
+                  </div>
                 </div>
               </div>
             ))}
@@ -357,6 +369,50 @@ export default function HomePage() {
               <MovieCard key={m.id} movie={m} size="md" />
             ))}
           </HorizontalScrollRow>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════
+          TOP RATED — Ranked list
+      ═══════════════════════════════════════ */}
+      <section className="py-16 border-t border-white/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-10">
+          <SectionHeader
+            icon={<Trophy className="w-4 h-4 text-yellow-400" />}
+            title="Top Rated"
+            subtitle="Highest rated of all time"
+            link={{ href: "/movies", label: "View all →" }}
+          />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {topRatedMovies.map((m, idx) => (
+              <Link
+                key={m.id}
+                to={`/movie/${m.slug}`}
+                className="group flex items-center gap-4 p-4 bg-white/[0.02] border border-white/8 rounded-2xl hover:border-[#e8a020]/30 hover:bg-white/[0.04] transition-all"
+              >
+                <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[#e8a020]/10 border border-[#e8a020]/20 flex items-center justify-center">
+                  <span className="text-[#e8a020] font-black text-sm font-mono">#{idx + 1}</span>
+                </div>
+                <div className="relative w-12 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                  <img src={m.posterUrl} alt={m.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-white text-sm font-semibold line-clamp-1 group-hover:text-[#e8a020] transition-colors">{m.title}</p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <div className="flex items-center gap-1">
+                      <Star className="w-3 h-3 text-[#e8a020] fill-[#e8a020]" />
+                      <span className="text-[#e8a020] text-xs font-bold font-mono">{m.rating.toFixed(1)}</span>
+                    </div>
+                    <span className="text-white/25 text-xs">·</span>
+                    <span className="text-white/35 text-xs font-mono">{m.year}</span>
+                    <span className="text-white/25 text-xs">·</span>
+                    <span className="text-white/35 text-xs">{m.genres[0]}</span>
+                  </div>
+                </div>
+                <ArrowRight className="w-4 h-4 text-white/20 group-hover:text-[#e8a020] transition-colors flex-shrink-0" />
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -440,6 +496,27 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ═══════════════════════════════════════
+          ACTION SPOTLIGHT
+      ═══════════════════════════════════════ */}
+      {actionMovies.length > 0 && (
+        <section className="py-12 border-t border-white/5">
+          <div className="max-w-7xl mx-auto px-4 sm:px-10">
+            <SectionHeader
+              icon={<Zap className="w-4 h-4 text-yellow-400" />}
+              title="Action"
+              subtitle="High-octane blockbusters"
+              link={{ href: "/categories/action", label: "See all →" }}
+            />
+            <HorizontalScrollRow>
+              {actionMovies.map((m) => (
+                <MovieCard key={m.id} movie={m} size="md" />
+              ))}
+            </HorizontalScrollRow>
+          </div>
+        </section>
+      )}
 
       {/* ═══════════════════════════════════════
           GENRE SHELF ROWS
@@ -526,10 +603,10 @@ export default function HomePage() {
             <div className="absolute top-0 left-1/4 w-96 h-64 bg-[#e8a020]/8 blur-[80px] rounded-full pointer-events-none" />
             <div className="absolute bottom-0 right-1/4 w-64 h-40 bg-purple-700/8 blur-[60px] rounded-full pointer-events-none" />
             <div
-              className="absolute inset-0 opacity-[0.03]"
+              className="absolute inset-0 opacity-[0.025]"
               style={{
                 backgroundImage: `linear-gradient(#e8a020 1px, transparent 1px), linear-gradient(90deg, #e8a020 1px, transparent 1px)`,
-                backgroundSize: "50px 50px",
+                backgroundSize: "40px 40px",
               }}
             />
             <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-8 px-8 sm:px-12 py-12">
@@ -563,9 +640,10 @@ export default function HomePage() {
                 ))}
                 <Link
                   to="/categories"
-                  className="px-5 py-2 bg-[#e8a020] text-black text-sm font-bold rounded-xl hover:bg-[#f5b830] transition-all shadow-[0_0_20px_rgba(232,160,32,0.3)]"
+                  className="flex items-center gap-1.5 px-5 py-2 bg-[#e8a020] text-black text-sm font-bold rounded-xl hover:bg-[#f5b830] transition-all shadow-[0_0_20px_rgba(232,160,32,0.3)]"
                 >
-                  All Genres →
+                  All Genres
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>
@@ -607,16 +685,17 @@ function SectionHeader({
             {title}
           </h2>
           {subtitle && (
-            <p className="text-white/35 text-xs font-mono mt-0.5">{subtitle}</p>
+            <p className="text-white/30 text-xs font-mono mt-0.5">{subtitle}</p>
           )}
         </div>
       </div>
       {link && (
         <Link
           to={link.href}
-          className="text-white/40 text-sm font-medium hover:text-[#e8a020] transition-colors flex items-center gap-1 font-mono"
+          className="flex items-center gap-1.5 px-3 py-1.5 text-white/35 text-sm font-medium hover:text-[#e8a020] transition-colors font-mono bg-white/[0.02] border border-white/8 rounded-lg hover:border-[#e8a020]/30 hover:bg-[#e8a020]/5"
         >
           {link.label}
+          <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       )}
     </div>

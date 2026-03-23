@@ -14,7 +14,7 @@ import {
   Zap,
   Award,
 } from "lucide-react";
-import { getMovies, getCategories } from "@/lib/store";
+import { getMovies, getCategories, resetStore } from "@/lib/store";
 import { Movie } from "@/types/movie";
 
 export default function AdminDashboard() {
@@ -25,6 +25,14 @@ export default function AdminDashboard() {
     setMovies(getMovies());
     setCatCount(getCategories().length);
   }, []);
+
+  const handleReset = () => {
+    if (confirm("Reset all data to default? This will restore all 20 sample movies.")) {
+      resetStore();
+      setMovies(getMovies());
+      setCatCount(getCategories().length);
+    }
+  };
 
   const recent = [...movies]
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
@@ -145,13 +153,21 @@ export default function AdminDashboard() {
             Welcome back — {movies.length} movies across {catCount} categories
           </p>
         </div>
-        <Link
-          to="/admin/movies/new"
-          className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-[#e8a020] text-black font-bold text-sm rounded-lg hover:bg-[#f5b830] transition-all shadow-[0_0_20px_rgba(232,160,32,0.25)]"
-        >
-          <PlusCircle className="w-4 h-4" />
-          Add Movie
-        </Link>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleReset}
+            className="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-white/[0.03] border border-white/10 text-white/50 font-medium text-sm rounded-lg hover:border-white/20 hover:text-white/80 transition-all"
+          >
+            Reset Data
+          </button>
+          <Link
+            to="/admin/movies/new"
+            className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-[#e8a020] text-black font-bold text-sm rounded-lg hover:bg-[#f5b830] transition-all shadow-[0_0_20px_rgba(232,160,32,0.25)]"
+          >
+            <PlusCircle className="w-4 h-4" />
+            Add Movie
+          </Link>
+        </div>
       </div>
 
       {/* Stats grid */}
